@@ -1,0 +1,26 @@
+# Python bytecode and execution caching
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Local Virtual Environment (Your custom environment)
+.venv/
+venv/
+env/
+
+# PyCharm IDE Specific files and configurations
+.idea/
+
+# Test Reports, HTML dashboards, and execution logs
+report.html
+assets/
+screenshots/
+*.log
+
+# Webdriver Manager local driver caches
+.wdm/
+# Core System files (Mac and Windows)
+.DS_Store
+Thumbs.db
