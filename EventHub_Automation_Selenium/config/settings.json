@@ -1,0 +1,5 @@
+{
+    "base_url": "https://eventhub.rahulshettyacademy.com",
+    "login_url": "/login",
+    "timeout": 10
+}

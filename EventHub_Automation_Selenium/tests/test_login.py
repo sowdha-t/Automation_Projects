@@ -1,24 +1,27 @@
 import pytest
 from pages.login_page import LoginPage
-from utils.excel_utils import ExcelUtils
+from utils.json_reader import JsonReader
 
-#Parse Excel matrix rows before run time starts
-test_records = ExcelUtils.get_sheet_data("data/login_data.xlsx","Sheet1")
-case_ids = [row["test_case"] for row in test_records]
+test_records = JsonReader.read_json("data/local/login_data.json")
+
+case_ids = [data["test_case"] for data in test_records]
+
 
 @pytest.mark.parametrize("data",test_records,ids=case_ids)
 def test_eventhub_login_matrix(driver,data):
-    #Initialize the specific page object with the driver state
     login_page = LoginPage(driver)
-
+    print(test_records)
     #Execute the step sequence
-    login_page.login_to_eventhub(data["email"],data["password"])
+    login_page.login_to_eventhub(
+        data["email"],
+        data["password"]
+    )
 
-    #Assert conditions based on test objective matrix
-    if "invalid" in data["test_case"]:
-        assert "Invalid Credentials" in login_page.get_error_message()
+    if data["test_case"] == "valid_login":
+        assert "EventHub — Discover & Book Events" in driver.title
     else:
-        assert "dashboard" in driver.current_url.lower()
+        assert "Invalid" in login_page.get_error_message()
+
 
 
 

@@ -1,0 +1,12 @@
+[
+    {
+        "test_case": "valid_login",
+        "email": "valid-email",
+        "password": "valid-password"
+    },
+    {
+        "test_case": "invalid_password",
+        "email": "your-test-email",
+        "password": "wrong-password"
+    }
+]

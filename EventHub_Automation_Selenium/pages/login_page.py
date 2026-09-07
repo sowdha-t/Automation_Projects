@@ -6,8 +6,8 @@ class LoginPage(BasePage):
 
     __email_field = (By.ID,"email")
     __password_field = (By.ID,"password")
-    __signin_button = (By.XPATH,"//button[contains(text(),'Sign In')]")
-    __error_alert = (By.CSS_SELECTOR,".alert-danger")
+    __signin_button = (By.ID,"login-btn")
+    __error_alert = (By.XPATH,"//div[@aria-live='polite']")
 
     def login_to_eventhub(self,email,password):
         self.type_text(self.__email_field,email)
@@ -15,4 +15,4 @@ class LoginPage(BasePage):
         self.click_element(self.__signin_button)
 
     def get_error_message(self):
-        return self.driver.find_element(*self.__error_alert).text
+        return self.get_text(self.__error_alert)
