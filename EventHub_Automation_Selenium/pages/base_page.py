@@ -26,4 +26,14 @@ class BasePage:
             EC.visibility_of_element_located(locator)
         ).text
 
+    def wait_for_url_contains(self, url_text):
+        self.wait.until(EC.url_contains(url_text))
+
+    def get_list_of_elements(self,locator):
+        return self.wait.until(
+            EC.visibility_of_all_elements_located(locator)
+        )
+
+
+
     

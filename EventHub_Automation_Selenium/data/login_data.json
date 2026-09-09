@@ -1,12 +1,38 @@
 [
     {
         "test_case": "valid_login",
-        "email": "valid-email",
-        "password": "valid-password"
+        "email": "enter your valid password",
+        "password": "Testing@123",
+        "expected_result" : "success"
+    },
+   {
+        "test_case": "invalid_email_authentication",
+        "email": "abc@gmail.com",
+        "password": "test123",
+        "expected_result" : "authentication_error",
+        "expected_message" : "Invalid email or password"
     },
     {
-        "test_case": "invalid_password",
-        "email": "your-test-email",
-        "password": "wrong-password"
+        "test_case": "invalid_password_authentication",
+        "email": "enter your valid password",
+        "password": "wrong-password",
+        "expected_result" : "authentication_error",
+        "expected_message" : "Invalid email or password"
+    },
+    {
+        "test_case" : "invalid_email_format",
+        "email" : "abc#234.com",
+        "password" : "Testing@123",
+        "expected_result" : "validation_error",
+        "expected_message" : "Enter a valid email",
+        "validation_field": "email"
+    },
+    {
+        "test_case" : "invalid_password_length",
+        "email" : "abc@gmail.com",
+        "password" : "123",
+        "expected_result" : "validation_error",
+        "expected_message" : "Password must be at least 6 characters",
+        "validation_field": "password"
     }
 ]
