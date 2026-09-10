@@ -1,3 +1,4 @@
+from selenium.common import StaleElementReferenceException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from utils.config_reader import ConfigReader
@@ -33,6 +34,26 @@ class BasePage:
         return self.wait.until(
             EC.visibility_of_all_elements_located(locator)
         )
+
+    def check_invisibility_of_elements(self,locator):
+        return self.wait.until(EC.invisibility_of_element_located(locator))
+
+    def wait_for_text_in_element(self,locator,expected_text):
+        self.wait.until(
+            lambda driver :
+            any (
+                expected_text.lower() in element.text.lower()
+                for element in driver.find_elements(*locator)
+            )
+        )
+
+    def wait_for_event_count_to_change(self, locator, old_event_count):
+        self.wait.until(
+            lambda driver:
+            len(driver.find_elements(*locator)) != old_event_count
+        )
+
+
 
 
 

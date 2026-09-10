@@ -16,8 +16,23 @@ class EventsPage(BasePage):
     #Add New Event  button at the bottom of the page
     __add_new_event_button = (By.XPATH, "//button[text()='Add New Event']")
 
-    def search_event(self,search_text):
+    #No Events found message
+    __no_events_found_message = (By.XPATH,"//h3[normalize-space()='No events found']")
+
+
+    def search_valid_event(self,search_text):
+        initial_event_count = self.get_event_count()
         self.type_text(self.__search_events_input_box,search_text)
+
+        self.wait_for_event_count_to_change(
+            self.__all_events_displayed,
+            initial_event_count)
+
+    def search_invalid_event(self,search_text):
+        self.type_text(self.__search_events_input_box, search_text)
+        event_list = self.check_invisibility_of_elements(self.__all_events_displayed)
+        return event_list
+
 
     def get_all_events(self):
         return self.get_list_of_elements(self.__all_events_displayed)
@@ -28,5 +43,8 @@ class EventsPage(BasePage):
     def get_event_names(self):
         event_names_element = self.get_list_of_elements(self.__event_names)
         return [event.text for event in event_names_element]
+
+    def get_no_events_message(self):
+        return self.get_text(self.__no_events_found_message)
 
 
