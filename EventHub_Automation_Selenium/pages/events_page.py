@@ -193,4 +193,66 @@ class EventsPage(BasePage):
 
         return False
 
+    """ These methods is used to verify the functionality of Clear filter button"""
+
+
+    def is_clear_filters_button_visible(self):
+        return self.is_visible(self.__clear_filter_button)
+
+    def clear_filters(self):
+        self.click_element(self.__clear_filter_button)
+
+    def get_search_text_box_value(self):
+        return self.driver.find_element(*self.__search_events_input_box).get_attribute("value")
+
+    def verify_clear_filter_functionality(self,search_text, category, city):
+
+        results = {}
+
+        #-----------------Search Filter---------------
+        self.type_text(self.__search_events_input_box,search_text)
+
+        results["search_filter"] = {
+            "button_visible_after_filter" : self.is_clear_filters_button_visible()
+        }
+
+        self.clear_filters()
+
+        results["search_filter"].update({
+            "button_visible_after_clear" : self.is_clear_filters_button_visible(),
+            "search_value_after_clear" : self.get_search_text_box_value()
+        })
+
+        #----------------------Category Filter--------------------
+        self.select_by_value(self.__all_categories_dropdown,category)
+
+        results["category_filter"] ={
+            "button_visible_after_filter" : self.is_clear_filters_button_visible()
+        }
+
+        self.clear_filters()
+
+        results["category_filter"].update({
+            "button_visible_after_clear": self.is_clear_filters_button_visible(),
+            "category_value_after_clear": self.get_dropdown_value(self.__all_categories_dropdown)
+
+        })
+
+        #-----------------------City Filter------------------------
+        self.select_by_value(self.__all_cities_dropdown, city)
+        results["city_filter"] = {
+            "button_visible_after_filter" : self.is_clear_filters_button_visible()
+        }
+
+        self.clear_filters()
+
+        results["city_filter"].update({
+            "button_visible_after_clear" : self.is_clear_filters_button_visible(),
+            "city_value_after_clear" : self.get_dropdown_value(self.__all_cities_dropdown)
+
+        })
+
+        return results
+
+
 

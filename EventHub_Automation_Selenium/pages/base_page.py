@@ -59,6 +59,11 @@ class BasePage:
         element = self.find_element(locator)
         return [option.get_attribute("value").strip() for option in Select(element).options if option.text.strip()]
 
+    def get_dropdown_value(self,locator):
+        element = self.wait.until(EC.visibility_of_element_located(locator))
+        return Select(element).first_selected_option.get_attribute("value")
+
+
     #-------------------Stale Checks---------------------------------
     def wait_for_stale(self,element):
         return self.wait.until(

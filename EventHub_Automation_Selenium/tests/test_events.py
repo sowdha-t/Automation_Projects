@@ -19,6 +19,8 @@ category_dropdown_data = [data for data in test_records if data["test_case"] == 
 city_filter_data = [data for data in test_records if data["test_case"] == "City Based Search"]
 city_case_ids = [data["test_case_name"] for data in city_filter_data]
 
+verify_filter_data = [data for data in test_records if data["test_case"] == "Verify Clear Filters"]
+
 #@pytest.mark.skip
 def test_events_are_displayed(logged_in_user):
     dashboard_page = DashboardPage(logged_in_user)
@@ -127,6 +129,67 @@ def test_search_city(logged_in_user,city_data):
         city_check = events_page.city_based_search(search_option)
         assert not city_check
         assert events_page.get_no_events_message() == city_data["expected_result"]
+
+
+@pytest.mark.parametrize("verify_filter_data",verify_filter_data,ids=lambda data : data["test_case_name"])
+def test_clear_filter_functionality(logged_in_user,verify_filter_data):
+    dashboard_page = DashboardPage(logged_in_user)
+    dashboard_page.navigate_to_events()
+    events_page = EventsPage(logged_in_user)
+
+    results = events_page.verify_clear_filter_functionality(
+        search_text=verify_filter_data["search_text"],
+        category=verify_filter_data["category"],
+        city= verify_filter_data["city"])
+    print(results)
+
+    # Verify search filter
+    search_result = results["search_filter"]
+
+    assert search_result["button_visible_after_filter"], (
+        "Clear Filters button did not appear after applying search"
+    )
+
+    assert not search_result["button_visible_after_clear"], (
+        "Clear Filters button remained visible after clearing search"
+    )
+
+    assert search_result["search_value_after_clear"] == "", (
+        "Search input was not cleared"
+    )
+
+    # Verify category filter
+    category_result = results["category_filter"]
+
+    assert category_result["button_visible_after_filter"], (
+        "Clear Filters button did not appear after selecting category"
+    )
+
+    assert not category_result["button_visible_after_clear"], (
+        "Clear Filters button remained visible after clearing category"
+    )
+
+    assert category_result["category_value_after_clear"] == "", (
+        "Category dropdown did not reset to All Categories"
+    )
+
+    # Verify city filter
+    city_result = results["city_filter"]
+
+    assert city_result["button_visible_after_filter"], (
+        "Clear Filters button did not appear after selecting city"
+    )
+
+    assert not city_result["button_visible_after_clear"], (
+        "Clear Filters button remained visible after clearing city"
+    )
+
+    assert city_result["city_value_after_clear"] == "", (
+        "City dropdown did not reset to All Cities"
+    )
+
+
+
 
 
 

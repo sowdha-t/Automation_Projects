@@ -68,5 +68,18 @@
         "expected_result": "No events found"
 
 
+    },
+    {
+        "test_case": "Verify Clear Filters",
+        "test_case_name" : "Verify Clear Filters functionality",
+        "search_text": "Dilli",
+        "category": "Concert",
+        "city": "Hyderabad" },
+    {
+        "test_case": "Combined City and Category Search",
+        "test_case_name": "Combined City and Category Search",
+        "city": "Hyderabad",
+        "category": "Concert",
+        "result_type": "found"
     }
 ]
