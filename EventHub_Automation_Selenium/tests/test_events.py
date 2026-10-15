@@ -21,7 +21,10 @@ city_case_ids = [data["test_case_name"] for data in city_filter_data]
 
 verify_filter_data = [data for data in test_records if data["test_case"] == "Verify Clear Filters"]
 
+combined_filter_search = [data for data in test_records if data["test_case"] == "Combined City and Category Search"]
+
 #@pytest.mark.skip
+@pytest.mark.smoke
 def test_events_are_displayed(logged_in_user):
     dashboard_page = DashboardPage(logged_in_user)
     dashboard_page.navigate_to_events()
@@ -68,7 +71,7 @@ def test_search_category(logged_in_user,category_data):
         assert not category_check
         assert events_page.get_no_events_message() == category_data["expected_result"]
 
-
+@pytest.mark.smoke
 @pytest.mark.parametrize("category_dropdown_data",category_dropdown_data,ids=lambda data: data["test_case_name"])
 def test_verify_all_dropdown_category_search(logged_in_user,category_dropdown_data):
     dashboard_page = DashboardPage(logged_in_user)
@@ -187,6 +190,47 @@ def test_clear_filter_functionality(logged_in_user,verify_filter_data):
     assert city_result["city_value_after_clear"] == "", (
         "City dropdown did not reset to All Cities"
     )
+
+@pytest.mark.parametrize("combined_filter_search_data",combined_filter_search,ids= lambda data : data["test_case_name"])
+def test_verify_combined_filters_search(logged_in_user,combined_filter_search_data):
+    dashboard_page = DashboardPage(logged_in_user)
+    dashboard_page.navigate_to_events()
+    events_page = EventsPage(logged_in_user)
+    result = events_page.verify_combined_filter_search(combined_filter_search_data)
+    expected = combined_filter_search_data["result_type"]
+
+    # Verify the actual result matches the expected outcome
+    assert result["actual_result"] == expected, (
+        f"Unexpected result for city '{result['selected_city']}' "
+        f"and category '{result['selected_category']}'. "
+        f"Expected: {expected}, "
+        f"Actual: {result['actual_result']}, "
+        f"Message: {result['no_events_message']}"
+    )
+
+    if expected == "found":
+        assert result["event_count"] > 0, (
+            "Expected matching events, but no event cards were returned"
+        )
+
+        assert result["category_match"], (
+            f"Unexpected categories: {result['actual_categories']}"
+        )
+
+        assert result["city_match"], (
+            f"Unexpected locations: {result['actual_locations']}"
+        )
+
+    else:
+        assert result["event_count"] == 0, (
+            f"Expected no events, but found "
+            f"{result['event_count']} events"
+        )
+
+        assert result["no_events_message"] == "No events found", (
+            f"Unexpected no-results message: "
+            f"{result['no_events_message']}"
+        )
 
 
 

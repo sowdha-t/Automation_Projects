@@ -2,7 +2,6 @@ from selenium.common import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
-import time
 from config import config
 
 
@@ -253,6 +252,91 @@ class EventsPage(BasePage):
         })
 
         return results
+
+    def verify_combined_filter_search(self,combined_filter_search_data):
+        city = combined_filter_search_data["city"]
+        category = combined_filter_search_data["category"]
+        expected = combined_filter_search_data["result_type"]
+
+        # Selecting a search value in the category dropdown
+        self.select_by_value(self.__all_categories_dropdown, category)
+        # Waiting for the DOM to rerender
+
+        self.wait_for_any_condition(
+            EC.visibility_of_element_located(self.__event_categories),
+            EC.visibility_of_element_located(self.__no_events_found_message)
+        )
+
+        # Selecting a search value in the city dropdown
+        self.select_by_value(self.__all_cities_dropdown, city)
+
+        self.wait_for_any_condition(
+            EC.visibility_of_element_located(self.__event_categories),
+            EC.visibility_of_element_located(self.__no_events_found_message)
+        )
+
+        #Preparing the result dictionary
+        results = {
+            "selected_city": city,
+            "selected_category": category,
+            "expected_result": expected,
+            "actual_result": None,
+            "event_count": 0,
+            "actual_categories": [],
+            "actual_locations": [],
+            "category_match": None,
+            "city_match": None,
+            "no_events_message": None
+        }
+
+        if self.is_element_present(self.__no_events_found_message):
+            print(self.get_text(self.__no_events_found_message))
+            print(f"No Events appeared for the selected category:{category} and city:{city} ")
+            results["actual_result"] = "not-found"
+            results["no_events_message"] = self.get_text(
+                self.__no_events_found_message
+            )
+            return results
+
+        #Collect Actual results
+
+        final_event_categories = self.get_list_of_elements(self.__event_categories)
+        final_city_list = self.get_event_locations()
+
+        actual_categories = [
+            element.text.strip()
+            for element in final_event_categories
+        ]
+
+        actual_locations = [
+            location.strip()
+            for location in final_city_list
+        ]
+
+        # Verify category and city
+        category_match = all(
+            actual_category == category
+            for actual_category in actual_categories
+        )
+
+        city_match = all(
+            location.rsplit(",", 1)[-1].strip() == city
+            for location in actual_locations
+        )
+
+        # Populate the result dictionary
+        results.update({
+            "actual_result": "found",
+            "event_count": len(actual_categories),
+            "actual_categories": actual_categories,
+            "actual_locations": actual_locations,
+            "category_match": category_match,
+            "city_match": city_match
+        })
+
+        return results
+
+
 
 
 
