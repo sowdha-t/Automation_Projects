@@ -14,6 +14,8 @@ text_filter_data = [data for data in test_records if data["test_case"] == "Searc
 category_filter_data = [data for data in test_records if data["test_case"] == "Category Based Search"]
 category_case_ids = [data["test_case_name"] for data in category_filter_data]
 
+category_dropdown_data = [data for data in test_records if data["test_case"] == "Category Recursive check"]
+
 city_filter_data = [data for data in test_records if data["test_case"] == "City Based Search"]
 city_case_ids = [data["test_case_name"] for data in city_filter_data]
 
@@ -65,14 +67,49 @@ def test_search_category(logged_in_user,category_data):
         assert events_page.get_no_events_message() == category_data["expected_result"]
 
 
-def test_verify_all_dropdown_category_search(logged_in_user):
+@pytest.mark.parametrize("category_dropdown_data",category_dropdown_data,ids=lambda data: data["test_case_name"])
+def test_verify_all_dropdown_category_search(logged_in_user,category_dropdown_data):
     dashboard_page = DashboardPage(logged_in_user)
     dashboard_page.navigate_to_events()
     events_page = EventsPage(logged_in_user)
-    events_page.verify_all_dropdown_category_search()
-    #changing the search option to default category
+    print("Test event page:Category dropdown values to test",category_dropdown_data["category_values_to_test"])
+    actual_results = events_page.verify_all_dropdown_category_search(category_dropdown_data["category_values_to_test"])
+    print(actual_results)
 
+    expected_results = category_dropdown_data["expected_results"]
 
+    #verify that every dropdown selection produced a result
+    assert len(actual_results) == len(expected_results), (f"Expected {len(expected_results)} results but received {len(actual_results)}")
+
+    #Verify each observed result
+    for actual, expected in zip(actual_results,expected_results):
+        assert (actual["result_type"] == expected), (
+            f"Unexpected result for category "  
+            f"'{actual['selected_value']}'. " 
+            f"Expected: {expected}, " 
+            f"Actual: {actual['result_type']}" )
+
+        # For categories that should return events
+        if actual["result_type"] == "found":
+            if actual["selected_value"] != "":
+                assert all(
+                    category == actual["selected_value"]
+                    for category in actual["actual_categories"]
+                ), ( f"Unexpected categories for " 
+                     f"'{actual['selected_value']}': " 
+                     f"{actual['actual_categories']}"
+                     )
+            # Verify that All Categories displays multiple categories
+            else: assert len(set(actual["actual_categories"])) > 1, (
+                "All Categories should display events " 
+                "from multiple categories" )
+            # Verify that categories expected to return no results
+        else:
+            assert actual["actual_categories"] == [], (
+                f"Expected no categories for " 
+                f"'{actual['selected_value']}', " 
+                f"but received {actual['actual_categories']}"
+            )
 
 @pytest.mark.skip
 @pytest.mark.parametrize("city_data",city_filter_data,ids=lambda data : data["test_case"])

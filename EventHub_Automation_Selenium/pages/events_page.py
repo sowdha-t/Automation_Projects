@@ -97,19 +97,23 @@ class EventsPage(BasePage):
         return False
 
 
-    def verify_all_dropdown_category_search(self,
-                                            category_values_to_test=["","Sports","Concert","Festival","","Sports","Concert","","Festival",""]):
+    def verify_all_dropdown_category_search(self,category_values_to_test):
+        actual_result = []
         #Loop through the list of values, handles re-renders and verify the fresh DOM
         dropdown_options = self.get_dropdown_options(self.__all_categories_dropdown)
         print(f"Category values to test:{category_values_to_test}")
         print(f"All dropdown options:{dropdown_options}")
+
         for category_value in category_values_to_test:
+            selected_category_details_dict = {}
             print(f"Testing the dropdown value:{category_value}")
+
             #check for event list or no records found before proceding with category list to be chosen
             initial_event_list = self.driver.find_elements(
                 *self.__all_events_displayed
             )
             self.select_by_value(self.__all_categories_dropdown, category_value)
+            selected_category_details_dict["selected_value"] = category_value
             #if initial_event_list:
 
 
@@ -121,12 +125,27 @@ class EventsPage(BasePage):
             no_event_check= self.is_visible(self.__no_events_found_message)
 
             if no_event_check:
+                selected_category_details_dict["result_type"] = "not_found"
+                selected_category_details_dict["actual_categories"] = []
+                actual_result.append(selected_category_details_dict)
                 print(f"This category does not have any events/records:{category_value}")
                 continue
 
             fresh_event_list = self.get_list_of_elements(self.__event_categories)
-
+            fresh_event_category_name = []
             print(f"Found fresh event list:{len(fresh_event_list)}")
+
+            if len(fresh_event_list) > 0:
+                selected_category_details_dict["result_type"] = "found"
+                for event in fresh_event_list:
+                    fresh_event_category_name.append(event.text.strip())
+
+            selected_category_details_dict["actual_categories"] = fresh_event_category_name
+            actual_result.append(selected_category_details_dict)
+
+        return actual_result
+
+
 
 
     def city_based_search(self):

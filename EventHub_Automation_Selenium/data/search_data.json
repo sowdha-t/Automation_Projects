@@ -27,6 +27,30 @@
         "result_type" : "not_found",
         "expected_result": "No events found"
     },
+    {
+        "test_case": "Category Recursive check",
+        "test_case_name" : "Verify repeated category dropdown selections",
+        "category_values_to_test": [
+            "Concert",
+            "Festival",
+            "",
+            "Sports",
+            "Concert",
+            "",
+            "Festival",
+            ""
+        ],
+        "expected_results": [
+            "found",
+            "found",
+            "found",
+            "not_found",
+            "found",
+            "found",
+            "found",
+            "found"
+        ]
+    },
 
     {
         "test_case": "City Based Search",
