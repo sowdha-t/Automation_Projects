@@ -1,16 +1,23 @@
+from selenium.common import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
+import time
+from config import config
+
 
 class EventsPage(BasePage):
     #Locators present in the Events page
     __eventhub_main_dashboard_link = (By.LINK_TEXT, "EventHub")
     __search_events_input_box = (By.XPATH,"//input[contains(@placeholder,'Search')]")
-    __all_categories_dropdown = (By.XPATH, "(//select)[1]")
-    __all_cities_dropdown = (By.XPATH, "(//select)[2]")
+    __all_categories_dropdown = (By.XPATH, "//option[text()='All Categories']/ancestor::select")
+    __all_cities_dropdown = (By.XPATH, "//option[text()='All Cities']/ancestor::select")
 
     #Featured Events section in the Events page
     __all_events_displayed = (By.CSS_SELECTOR, "#event-card")
     __event_names = (By.CSS_SELECTOR, "[data-testid='event-card'] h3")
+    __event_categories = (By.XPATH, "//article[@data-testid='event-card']//div[@class='absolute top-3 left-3']/span")
+    __event_cities_elements = (By.XPATH,"//article[@data-testid='event-card']//div[contains(@class, 'items-start')]//span[@class='line-clamp-1']`")
     __book_now_button_list = (By.CSS_SELECTOR,"[data-testid='book-now-btn']")
 
     #Add New Event  button at the bottom of the page
@@ -18,6 +25,11 @@ class EventsPage(BasePage):
 
     #No Events found message
     __no_events_found_message = (By.XPATH,"//h3[normalize-space()='No events found']")
+
+    def navigate_to_events_page(self):
+        events_url = config.BASE_URL + config.EVENTS_URL
+        self.driver.get(events_url)
+        self.wait_for_url_contains(config.EVENTS_URL)
 
 
     def search_valid_event(self,search_text):
@@ -46,5 +58,78 @@ class EventsPage(BasePage):
 
     def get_no_events_message(self):
         return self.get_text(self.__no_events_found_message)
+
+    def category_based_search(self,search_text):
+        #Getting the initial list of events
+        initial_event_list = self.get_all_events()
+        #length_initial_event_list = len(initial_event_list)
+
+        #Selecting a search value in the dropdown
+        self.select_by_value(self.__all_categories_dropdown,search_text)
+        #Waiting for the DOM to rerender
+
+        self.wait_for_stale(initial_event_list[0])
+
+        self.wait_for_any_condition(
+            EC.visibility_of_element_located(self.__event_categories),
+            EC.visibility_of_element_located(self.__no_events_found_message)
+        )
+
+
+        if self.is_element_present(self.__no_events_found_message):
+            print(self.get_text(self.__no_events_found_message))
+            print(f"No Events appeared for the selected category:{search_text}")
+            return False
+
+        try:
+            filtered_event_categories =  self.get_list_of_elements(self.__event_categories)
+        except TimeoutException:
+            print(self.get_text(self.__no_events_found_message))
+            print(f"No Events appeared for the selected category:{search_text}")
+            return False
+
+        for event in filtered_event_categories:
+            if event.text != search_text:
+                break
+        else:
+            return True
+
+        return False
+
+
+    def verify_all_dropdown_category_search(self,
+                                            category_values_to_test=["","Sports","Concert","Festival","","Sports","Concert","","Festival",""]):
+        #Loop through the list of values, handles re-renders and verify the fresh DOM
+        dropdown_options = self.get_dropdown_options(self.__all_categories_dropdown)
+        print(f"Category values to test:{category_values_to_test}")
+        print(f"All dropdown options:{dropdown_options}")
+        for category_value in category_values_to_test:
+            print(f"Testing the dropdown value:{category_value}")
+            #check for event list or no records found before proceding with category list to be chosen
+            initial_event_list = self.driver.find_elements(
+                *self.__all_events_displayed
+            )
+            self.select_by_value(self.__all_categories_dropdown, category_value)
+            #if initial_event_list:
+
+
+            self.wait_for_any_condition(
+                EC.visibility_of_element_located(self.__all_events_displayed),
+                EC.visibility_of_element_located(self.__no_events_found_message)
+            ) or self.wait_for_stale(initial_event_list[0])
+
+            no_event_check= self.is_visible(self.__no_events_found_message)
+
+            if no_event_check:
+                print(f"This category does not have any events/records:{category_value}")
+                continue
+
+            fresh_event_list = self.get_list_of_elements(self.__event_categories)
+
+            print(f"Found fresh event list:{len(fresh_event_list)}")
+
+
+    def city_based_search(self):
+        pass
 
 

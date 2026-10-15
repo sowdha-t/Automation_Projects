@@ -1,14 +1,38 @@
 [
     {
-        "test_case" : "Valid Search Text",
+        "test_case" : "Search Text",
+        "test_case_name": "Valid Search Text",
         "search_text": "Dilli",
         "expected_result": "Dilli Diwali Mela",
         "result_type": "found"
     },
     {
-        "test_case" : "Invalid Search Text",
+        "test_case" : "Search Text",
+        "test_case_name": "Invalid Search Text",
         "search_text": "XYZ123",
         "expected_result": "No events found",
         "result_type": "not_found"
+    },
+    {
+        "test_case": "Category Based Search",
+        "test_case_name": "Category Based Search - With Result",
+        "search_option" : "Concert",
+        "result_type" : "found"
+    },
+
+    {
+        "test_case": "Category Based Search",
+        "test_case_name": "Category Based Search - With No result",
+        "search_option" : "Sports",
+        "result_type" : "not_found",
+        "expected_result": "No events found"
+    },
+
+    {
+        "test_case": "City Based Search",
+        "test_case_name": "City Based Search - with record exist",
+        "search_option" : "Hyderabad"
+
+
     }
 ]

@@ -2,7 +2,6 @@ from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 
 class LoginPage(BasePage):
-    #Encapsulated Private Locators specific to EventHub Login page
 
     __email_field = (By.ID,"email")
     __password_field = (By.ID,"password")
