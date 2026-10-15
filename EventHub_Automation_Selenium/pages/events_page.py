@@ -17,10 +17,11 @@ class EventsPage(BasePage):
     __all_events_displayed = (By.CSS_SELECTOR, "#event-card")
     __event_names = (By.CSS_SELECTOR, "[data-testid='event-card'] h3")
     __event_categories = (By.XPATH, "//article[@data-testid='event-card']//div[@class='absolute top-3 left-3']/span")
-    __event_cities_elements = (By.XPATH,"//article[@data-testid='event-card']//div[contains(@class, 'items-start')]//span[@class='line-clamp-1']`")
+    __event_cities_elements = (By.XPATH,"//article[@data-testid='event-card']//div[contains(@class,'space-y-1.5')]//div[2]/span")
     __book_now_button_list = (By.CSS_SELECTOR,"[data-testid='book-now-btn']")
 
-    #Add New Event  button at the bottom of the page
+    #Clear filter button and Add New Event  button at the bottom of the page
+    __clear_filter_button = (By.XPATH, "//button[normalize-space()='Clear filters']")
     __add_new_event_button = (By.XPATH, "//button[text()='Add New Event']")
 
     #No Events found message
@@ -55,6 +56,11 @@ class EventsPage(BasePage):
     def get_event_names(self):
         event_names_element = self.get_list_of_elements(self.__event_names)
         return [event.text for event in event_names_element]
+
+    def get_event_locations(self):
+        city_locations = self.get_list_of_elements(self.__event_cities_elements)
+        return [city.text.strip() for city in city_locations]
+
 
     def get_no_events_message(self):
         return self.get_text(self.__no_events_found_message)
@@ -146,9 +152,45 @@ class EventsPage(BasePage):
         return actual_result
 
 
+    def city_based_search(self,search_text):
+        #Getting the initial list of events
+        initial_event_list = self.get_all_events()
+        #length_initial_event_list = len(initial_event_list)
+
+        #Selecting a search value in the dropdown
+        self.select_by_value(self.__all_cities_dropdown,search_text)
+        #Waiting for the DOM to rerender
+
+        self.wait_for_stale(initial_event_list[0])
+
+        self.wait_for_any_condition(
+            EC.visibility_of_element_located(self.__event_categories),
+            EC.visibility_of_element_located(self.__no_events_found_message)
+        )
 
 
-    def city_based_search(self):
-        pass
+        if self.is_element_present(self.__no_events_found_message):
+            print(self.get_text(self.__no_events_found_message))
+            print(f"No Events appeared for the selected category:{search_text}")
+            return False
+
+        try:
+            filtered_event_categories =  self.get_event_locations()
+        except TimeoutException:
+            print(self.get_text(self.__no_events_found_message))
+            print(f"No Events appeared for the selected category:{search_text}")
+            return False
+
+        for city_location in filtered_event_categories:
+            print(f"City Location:{city_location}")
+            print(f"Search Text:{search_text}")
+            city_name = city_location.split(",")[-1]
+            print(f"City Name:{city_name.strip()}")
+            if  city_name.strip() != search_text:
+                break
+        else:
+            return True
+
+        return False
 
 

@@ -55,7 +55,17 @@
     {
         "test_case": "City Based Search",
         "test_case_name": "City Based Search - with record exist",
-        "search_option" : "Hyderabad"
+        "search_option" : "Hyderabad",
+        "result_type" : "found"
+
+
+    },
+    {
+        "test_case": "City Based Search",
+        "test_case_name": "City Based Search - with no record exist",
+        "search_option" : "Chennai",
+        "result_type" : "not_found",
+        "expected_result": "No events found"
 
 
     }

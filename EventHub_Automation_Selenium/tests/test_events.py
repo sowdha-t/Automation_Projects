@@ -111,10 +111,23 @@ def test_verify_all_dropdown_category_search(logged_in_user,category_dropdown_da
                 f"but received {actual['actual_categories']}"
             )
 
-@pytest.mark.skip
-@pytest.mark.parametrize("city_data",city_filter_data,ids=lambda data : data["test_case"])
+
+@pytest.mark.parametrize("city_data",city_filter_data,ids=lambda data : data["test_case_name"])
 def test_search_city(logged_in_user,city_data):
-    pass
+    dashboard_page = DashboardPage(logged_in_user)
+    dashboard_page.navigate_to_events()
+    events_page = EventsPage(logged_in_user)
+    search_option = city_data["search_option"]
+
+    if city_data["result_type"] == "found":
+        city_check = events_page.city_based_search(search_option)
+        assert city_check, f"Some events do not belong to the city:{search_option}"
+
+    elif city_data["result_type"] == "not_found":
+        city_check = events_page.city_based_search(search_option)
+        assert not city_check
+        assert events_page.get_no_events_message() == city_data["expected_result"]
+
 
 
 
