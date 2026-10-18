@@ -1,4 +1,4 @@
-from selenium.common import StaleElementReferenceException, TimeoutException
+from selenium.common import StaleElementReferenceException, TimeoutException, ElementClickInterceptedException
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from utils.config_reader import ConfigReader
@@ -34,10 +34,28 @@ class BasePage:
 
     #--------------actions--------------------
 
+    def scroll_to_view_element(self,locator):
+        element = self.wait.until(
+            EC.visibility_of_element_located(locator)
+        )
+
+        self.driver.execute_script(
+            """
+            arguments[0].scrollIntoView({
+                behavior: 'instant',
+                block: 'center'
+            });
+            """,
+            element
+        )
+
+
     def click_element(self,locator):
-        self.wait.until(
+
+        element = self.wait.until(
             EC.element_to_be_clickable(locator)
-        ).click()
+        )
+        element.click()
 
     def type_text(self,locator,text):
         element = self.find_visible(locator)
@@ -110,6 +128,35 @@ class BasePage:
             lambda driver:
             len(driver.find_elements(*locator)) != old_event_count
         )
+
+    def wait_for_element_to_disappear(self, locator):
+        self.wait.until(
+            EC.invisibility_of_element_located(locator)
+        )
+
+    def wait_for_element_to_appear(self,locator):
+        self.wait.until(
+            EC.visibility_of_element_located(locator)
+        )
+
+    #---------------Forcing the read-only calendar textbox to input a valid value
+
+    def input_to_readonly_textbox(self,element,value):
+        #Inject the ISO string directly into the value attribute
+        #formatted_date must be in "YYYY-MM-DDTHH:MM" format (which yours already is)
+        #Update the backend value
+        self.driver.execute_script("""
+                    var element = arguments[0];
+                    element.removeAttribute('readonly');
+
+                    // Access the hidden framework tracker used by React/Vue to change state
+                    var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+                    nativeInputValueSetter.call(element, arguments[1]);
+
+                    // Fire the event natively
+                    element.dispatchEvent(new Event('input', { bubbles: true }));
+                """, element, value)
+
 
 
 

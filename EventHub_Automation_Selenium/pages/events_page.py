@@ -26,10 +26,11 @@ class EventsPage(BasePage):
     #No Events found message
     __no_events_found_message = (By.XPATH,"//h3[normalize-space()='No events found']")
 
-    def navigate_to_events_page(self):
-        events_url = config.BASE_URL + config.EVENTS_URL
-        self.driver.get(events_url)
-        self.wait_for_url_contains(config.EVENTS_URL)
+
+    def navigate_to_add_event(self):
+        self.scroll_to_view_element(self.__add_new_event_button)
+        self.click_element(self.__add_new_event_button)
+        self.wait_for_url_contains("/admin/events")
 
 
     def search_valid_event(self,search_text):
