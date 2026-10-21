@@ -2,15 +2,15 @@
   {
     "test_case" : "create_new_event",
     "test_case_name" : "Creating a New Event ",
-    "event_title": "Illaiyaraja Concert",
-    "event_description":"Here comes the most exciting music and melody under Music Meastro - Innisai Thendral Illaiyaraja",
-    "event_category": "Concert",
-    "event_city" : "Chennai",
-    "event_venue" :"Nehru Stadium",
-    "event_price" : "300.00",
-    "event_total_seats" : "50",
-    "event_image_url" : "https://cdn.pixabay.com/photo/2016/11/29/06/17/audience-1867754_640.jpg",
-    "event_date" : "2027-02-11T18:00"
+    "event_title": "Agentic AI Workshop",
+    "event_description":"Here comes the trending workshop for IT People",
+    "event_category": "Workshop",
+    "event_city" : "Mangalore",
+    "event_venue" :"Hotel ITC",
+    "event_price" : "3000.00",
+    "event_total_seats" : "20",
+    "event_image_url" : "https://images.pexels.com/photos/8761327/pexels-photo-8761327.jpeg?cs=tinysrgb&dpr=1&w=500",
+    "event_date" : "2027-01-21T09:00"
   }
 ]
 
