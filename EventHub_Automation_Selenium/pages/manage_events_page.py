@@ -9,13 +9,13 @@ class ManageEventsPage(BasePage):
 
     __event_titles = (By.CSS_SELECTOR,"tr[data-testid='event-table-row'] td:first-child > span:first-child")
 
-    __event_categories = (By.CSS_SELECTOR,"")
+    #__event_categories = (By.CSS_SELECTOR,"")
 
-    __event_city = (By.CSS_SELECTOR, "")
+    #__event_city = (By.CSS_SELECTOR, "")
 
-    __event_price = (By.CSS_SELECTOR,"")
+    #__event_price = (By.CSS_SELECTOR,"")
 
-    __event_seats = (By.CSS_SELECTOR,"")
+    #__event_seats = (By.CSS_SELECTOR,"")
 
     #Delete event Locators
     __delete_event_dialog_button = (By.CSS_SELECTOR, "#confirm-dialog-yes")

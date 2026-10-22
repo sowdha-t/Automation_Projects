@@ -17,6 +17,9 @@ env/
 data/local/
 # Test Reports, HTML dashboards, and execution logs
 report.html
+reports/
+allure-results/
+allure-report/
 assets/
 screenshots/
 *.log

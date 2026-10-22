@@ -35,7 +35,7 @@ def test_add_new_event(logged_in_user,event_creation_data):
 
     )
 
-@pytest.mark.skip
+#@pytest.mark.skip
 @pytest.mark.parametrize("event_title_to_check",["Agentic AI Workshop"],ids=["Event Title Check"])
 def test_event_is_displayed_in_admin_table(logged_in_user,event_title_to_check):
     dashboard_page = DashboardPage(logged_in_user)
@@ -108,7 +108,7 @@ def test_delete_event(logged_in_user,event_title_to_delete):
         (f"Event {event_title_to_delete} is not deleted successfully")
 
 
-@pytest.mark.skip
+#@pytest.mark.skip
 @pytest.mark.parametrize("event_title_to_delete",["IPL IND Vs AUS Cricket"],ids=["Event Delete Check Verification"])
 def test_delete_cancel_event(logged_in_user,event_title_to_delete):
     dashboard_page = DashboardPage(logged_in_user)

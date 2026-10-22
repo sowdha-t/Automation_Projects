@@ -2,7 +2,7 @@
   {
     "test_case": "update_event",
     "test_case_name": "Updating Existing Event and verifying in All Events and Events Page ",
-    "event_original_title": "Advanced QA Automation Workshop-Updated",
+    "event_original_title": "Agentic AI Workshop",
     "event_title": "Advanced QA Automation Workshop-Updated",
     "event_city": "Ladhak",
     "event_price": "50",

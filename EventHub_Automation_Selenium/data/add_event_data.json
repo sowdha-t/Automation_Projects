@@ -11,6 +11,19 @@
     "event_total_seats" : "20",
     "event_image_url" : "https://images.pexels.com/photos/8761327/pexels-photo-8761327.jpeg?cs=tinysrgb&dpr=1&w=500",
     "event_date" : "2027-01-21T09:00"
+  },
+  {
+    "test_case" : "create_new_event",
+    "test_case_name" : "Creating a New Event ",
+    "event_title": "IPL IND Vs AUS Cricket",
+    "event_description":"Welcome To Cricket World",
+    "event_category": "Sports",
+    "event_city" : "Bangalore",
+    "event_venue" :"Chinnaswamy Stadium",
+    "event_price" : "3000.00",
+    "event_total_seats" : "2000",
+    "event_image_url" : "https://images.pexels.com/photos/8761327/pexels-photo-8761327.jpeg?cs=tinysrgb&dpr=1&w=500",
+    "event_date" : "2027-04-05T09:00"
   }
 ]
 
