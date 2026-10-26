@@ -2,6 +2,7 @@ from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from datetime import datetime, timedelta
 
+
 class AddEventPage(BasePage):
 
     #------------Locators------------
@@ -40,6 +41,11 @@ class AddEventPage(BasePage):
 
     def create_new_event(self,event_creation_data):
         title = event_creation_data["event_title"]
+        title = event_creation_data.get(
+            "event_title_override",
+            event_creation_data["event_title"]
+        )
+
         description = event_creation_data["event_description"]
         category = event_creation_data["event_category"]
         city = event_creation_data["event_city"]
@@ -85,6 +91,7 @@ class AddEventPage(BasePage):
 
 
     def update_event(self,update_event_data):
+
         field_locators = {
             "event_title": self.__event_title,
             "event_description": self.__event_description,
