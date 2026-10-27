@@ -22,6 +22,9 @@ allure-results/
 allure-report/
 assets/
 screenshots/
+# Generated reports
+reports/html/*
+reports/allure-results/*
 *.log
 
 # Webdriver Manager local driver caches
@@ -29,3 +32,6 @@ screenshots/
 # Core System files (Mac and Windows)
 .DS_Store
 Thumbs.db
+
+# Execution logs
+logs/*
