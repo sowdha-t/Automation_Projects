@@ -32,6 +32,33 @@ def navigate_to_login_page(home_page):
     home_page.wait_for_url_contains("sign-in")
     assert "sign-in" in home_page.get_current_url()
 
+@then("the sign up button should be visible")
+def check_signup_button_visible(home_page):
+    assert home_page.check_signup_displayed(), "Sign up button is not displayed"
+
+@when("the user clicks the sign up button")
+def click_signup_button(home_page):
+    home_page.click_signup_button()
+    print(home_page.get_current_url())
+
+@then(parsers.parse('the current url should be "{url}"'))
+def navigate_to_signup_page(home_page,url):
+    print(home_page.get_current_url())
+    print(home_page.get_current_url())
+    assert url in home_page.get_current_url()
+
+@then(parsers.parse('the user navigates to "{register_url}" successfully'))
+def navigate_to_signup_page(home_page,register_url):
+    print(home_page.get_current_url())
+    print(home_page.get_current_url())
+    assert register_url in home_page.get_current_url()
+
+@then("the register page should load properly")
+def verify_successful_navigation(home_page):
+    print(home_page.get_page_title())
+    assert "HCL GUVI | Sign Up" in home_page.get_page_title()
+    assert "register" in home_page.get_current_url()
+
 
 
 

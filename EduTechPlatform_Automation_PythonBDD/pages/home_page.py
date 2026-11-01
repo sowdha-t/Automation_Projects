@@ -25,3 +25,9 @@ class HomePage(BasePage):
     def click_login_button(self):
         self.click_element(self.__login_button)
 
+    def check_signup_displayed(self):
+        return self.find_visible(self.__signup_button)
+
+    def click_signup_button(self):
+        self.click_element(self.__signup_button)
+

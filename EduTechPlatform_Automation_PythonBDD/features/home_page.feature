@@ -20,3 +20,21 @@ Feature: EduTech App GUVI Home Page
       Then the login button should be visible
       When the user clicks the login button
       Then the user navigates to login page
+
+    Scenario Outline: TestCase_04: Sign Up button is visible and clickable
+      Then the sign up button should be visible
+      When the user clicks the sign up button
+      Then the current url should be "<url>"
+
+      Examples:
+      | url |
+      |https://www.guvi.in/register/|
+
+    Scenario Outline: TestCase_05: Sign Up button navigates to register page
+      When the user clicks the sign up button
+      Then the user navigates to "<register_url>" successfully
+      And the register page should load properly
+
+      Examples:
+      |register_url|
+      |https://www.guvi.in/register/|
