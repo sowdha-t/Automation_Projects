@@ -54,10 +54,11 @@ def navigate_to_signup_page(home_page,register_url):
     assert register_url in home_page.get_current_url()
 
 @then("the register page should load properly")
-def verify_successful_navigation(home_page):
+def verify_successful_navigation(home_page,config):
     print(home_page.get_page_title())
+    register_url = config.get("urls","signup_url")
     assert "HCL GUVI | Sign Up" in home_page.get_page_title()
-    assert "register" in home_page.get_current_url()
+    assert register_url in home_page.get_current_url()
 
 
 
