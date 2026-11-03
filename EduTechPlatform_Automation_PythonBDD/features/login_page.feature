@@ -14,7 +14,7 @@ Feature: Guvi Login
 
     Scenario Outline: TestCase_07: Login with invalid credentials
       When the user enters the invalid credentials for test case "<case_id>"
-      And the user clicks the submit button
+      And the user triggers the validation
       Then the expected error message should be displayed
       And the user remains on the login page
 
@@ -24,4 +24,5 @@ Feature: Guvi Login
       | wrong_password |
       | invalid_email   |
       | empty_password  |
+      | empty_email     |
 

@@ -1,3 +1,5 @@
+from selenium.webdriver import Keys
+from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 
@@ -8,8 +10,19 @@ class LoginPage(BasePage):
     __password_field = (By.ID, "password")
     __submit_button = (By.ID, "login-btn")
 
-    __email_error_field = (By.CSS_SELECTOR, "div[id='emailgroup'] div[class='invalid-feedback']")
+    __email_error_field = (By.CSS_SELECTOR, "#emailgroup .invalid-feedback")
     __password_error_field = (By.CSS_SELECTOR, "div[id='passwordGroup'] div[class='invalid-feedback']")
+    __error_fields = {
+        "email_field" :__email_error_field,
+        "password_field" : __password_error_field
+    }
+
+    __input_fields = {
+        "email" : __email_field,
+        "password" : __password_field
+    }
+
+
     #__profile_image = (By.XPATH,"(//button[@data-target='#account-box'])[1]")
     #__profile_email_id = (By.XPATH, "(//div[@data-parent='#accountGroup']//small[@class='email-wrap'])[1]")
 
@@ -41,3 +54,17 @@ class LoginPage(BasePage):
 
     def get_password_validation_error_msg(self):
         return self.get_text(self.__password_error_field)
+
+    def get_error_message(self, field_name):
+        locator = self.__error_fields[field_name]
+        element = self.find_visible(locator)
+        self.wait.until(lambda d: element.text.strip() != "")
+        return element.text.strip()
+
+    def is_field_invalid(self, field_name):
+        """True if the input box carries Bootstrap's 'is-invalid' class (the red box)."""
+        field = self.wait.until(
+            EC.presence_of_element_located(self.__email_field)
+        )
+        self.wait.until(lambda d: "is-invalid" in field.get_attribute("class"))
+        return True

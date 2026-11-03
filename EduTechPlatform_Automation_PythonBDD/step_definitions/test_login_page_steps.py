@@ -35,29 +35,30 @@ def verify_unsuccessful_login(login_page,case_id, valid_credentials):
     if case_id == "wrong_password":
         email = valid_credentials[0]
 
-    if case_id == "empty_password":
-        password = ""
-
-    if case_id == "empty_email":
-        email = ""
-
     login_page.enter_login_details(email ,password)
     print(row)
     return row
 
+@when('the user triggers the validation')
+def check_validation_type(login_page,login_data):
+    if login_data["validation_type"] == "server_side":
+        login_page.submit_login_details()
+
 @then("the expected error message should be displayed")
 def verify_error_message(login_page, login_data):
-    print(login_data)
-    if login_data["case_id"] == "wrong_email":
-        assert login_page.get_password_validation_error_msg() == login_data["error_message"]
-    elif login_data["case_id"] == "wrong_password":
-        assert login_page.get_password_validation_error_msg() == login_data["error_message"]
-    elif login_data["case_id"] == "invalid_email":
-        assert login_page.get_email_validation_error_msg() == login_data["error_message"]
-    elif login_data["case_id"] == "empty_email":
-        assert login_page.get_email_validation_error_msg() == login_data["error_message"]
-    elif login_data["case_id"] == "empty_password":
-        assert login_page.get_password_validation_error_msg() == login_data["error_message"]
+    print(f"Inside verify_error_message:{login_data}")
+    field = login_data["error_field"]
+    expected_error_message = login_data["error_message"]
+
+    if expected_error_message:
+        actual = login_page.get_error_message(login_data["error_field"])
+        print(f"Actual error message:{actual}")
+        assert actual == login_data["error_message"] , (
+            f"[{login_data['validation_type']}] expected '{login_data['error_message']}' "
+            f"under the {login_data['error_field']} field but found '{actual}'"
+        )
+    else:
+        assert login_page.is_field_invalid(login_data["error_field"]), f"{field} not marked invalid"
 
 
 @then("the user remains on the login page")
