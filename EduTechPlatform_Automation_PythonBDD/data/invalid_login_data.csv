@@ -1,0 +1,5 @@
+case_id,email,password,error_message
+wrong_email,abc@abc.com,cwwefw,Incorrect Email or Password
+wrong_password,validemail@gmail.com,tscds@123,Incorrect Email or Password
+invalid_email,defewfwefwefewfewfewffwef,re@123,Hmm...that doesnt look like an email address.Try again
+empty_password,abc@abc.com,,"Hey, Did you forgot your password? Try again."

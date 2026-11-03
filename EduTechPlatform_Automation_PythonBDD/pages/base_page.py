@@ -39,7 +39,7 @@ class BasePage:
         element.click()
 
     def get_text(self,locator):
-        element = self.find_element(locator)
+        element = self.find_visible(locator)
         return element.text.strip()
 
     #----------------URL Related operations
