@@ -13,8 +13,8 @@ env/
 .env
 # PyCharm IDE Specific files and configurations
 .idea/
-#Local test data containing credentials
-data/local/
+#Local test test_data containing credentials
+test_data/local/
 # Test Reports, HTML dashboards, and execution logs
 report.html
 reports/
