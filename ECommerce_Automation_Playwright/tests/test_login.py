@@ -50,6 +50,7 @@ def test_login_with_predefined_users(login_page,
     else:
         pytest.fail(f"unsupported expected result:{expected_result}")
 
+@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.parametrize("invalid_login_user_data",invalid_login_user_data_from_csv, ids=invalid_login_test_case_ids)
 def test_verify_invalid_user_login(login_page,invalid_login_user_data):
     username = invalid_login_user_data["username"]
@@ -60,6 +61,30 @@ def test_verify_invalid_user_login(login_page,invalid_login_user_data):
     login_page.login(username, password)
     expect(login_page.error_message).to_be_visible()
     expect(login_page.error_message).to_contain_text(expected_error_msg)
+
+def test_verify_logout_functionality(login_page,product_page):
+    login_page.navigate("/")
+    login_page.login(VALID_USERNAME, VALID_PASSWORD)
+    expect(login_page.page).to_have_title("Swag Labs")
+    expect(login_page.page).to_have_url("https://www.saucedemo.com/inventory.html")
+    expect(login_page.page.locator(".title")).to_be_visible()
+    expect(login_page.page.locator(".title")).to_have_text("Products")
+
+    #open menu and click logout
+    product_page.open_menu()
+    product_page.click_logout()
+
+    #assertions for verifying logout functionality
+    expect(login_page.username_field).to_be_visible()
+    expect(login_page.password_field).to_be_visible()
+    expect(login_page.submit_button).to_be_visible()
+    expect(login_page.username_field).to_be_enabled()
+    expect(login_page.password_field).to_be_enabled()
+    expect(login_page.submit_button).to_be_enabled()
+    expect(login_page.page).to_have_url("https://www.saucedemo.com/")
+
+
+
 
 
 

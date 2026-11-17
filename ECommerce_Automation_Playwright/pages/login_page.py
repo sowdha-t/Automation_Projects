@@ -22,4 +22,14 @@ class LoginPage:
     def error_message(self):
         return self._error_message
 
+    @property
+    def username_field(self):
+        return self._username_field
+    @property
+    def password_field(self):
+        return self._password_field
+    @property
+    def submit_button(self):
+        return self._submit_button
+
 
