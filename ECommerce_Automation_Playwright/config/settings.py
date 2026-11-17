@@ -1,8 +1,6 @@
 import os
 from pathlib import Path
-
 from dotenv import load_dotenv
-
 
 # Locate the project root
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -11,11 +9,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(PROJECT_ROOT / ".env")
 
 # Read application configuration
-BASE_URL = os.getenv(
-    "BASE_URL",
-    "https://www.saucedemo.com"
-).rstrip("/")
+VALID_USERNAME = os.getenv("VALID_USERNAME")
+VALID_PASSWORD = os.getenv("VALID_PASSWORD")
 
-DEFAULT_TIMEOUT_MS = int(
-    os.getenv("DEFAULT_TIMEOUT_MS", "10000")
-)

@@ -1,0 +1,23 @@
+[
+    {
+        "username": "performance_glitch_user",
+        "expected_result": "success"
+    },
+    {
+        "username": "problem_user",
+        "expected_result": "success"
+    },
+    {
+        "username": "error_user",
+        "expected_result": "success"
+    },
+    {
+        "username": "visual_user",
+        "expected_result": "success"
+    },
+    {
+        "username": "locked_out_user",
+        "expected_result": "failure",
+        "expected_error": "Sorry, this user has been locked out."
+    }
+]

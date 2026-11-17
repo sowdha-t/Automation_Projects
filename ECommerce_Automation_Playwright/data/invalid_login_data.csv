@@ -1,0 +1,7 @@
+﻿test_case,username,password,expected_error
+Invalid username,invalid_user,secret_sauce,Username and Password do not match
+Invalid password,standard_user,wrong_pswd,Username and Password do not match
+Both invalid,invalid_user,wrong_pswd,Username and Password do not match
+Empty Username,,secret_sauce,Username is required
+Empty Password,standard_user,,Password is required
+Both empty,,,Username is required
