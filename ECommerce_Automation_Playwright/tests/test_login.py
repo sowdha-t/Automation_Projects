@@ -16,12 +16,18 @@ invalid_login_user_data_from_csv = CSVReader.read_csv_data(csv_file_path)
 invalid_login_test_case_ids =[data['test_case'] for data in invalid_login_user_data_from_csv]
 
 
-@pytest.mark.skip(reason="Already Passed Test Cases")
+#@pytest.mark.skip(reason="Already Passed Test Cases")
+@pytest.mark.smoke
+@pytest.mark.regression
+@pytest.mark.login
 def test_application_launch(login_page):
     login_page.navigate("/")
     expect(login_page.page).to_have_title("Swag Labs")
 
-@pytest.mark.skip(reason="Already Passed Test Cases")
+#@pytest.mark.skip(reason="Already Passed Test Cases")
+@pytest.mark.smoke
+@pytest.mark.regression
+@pytest.mark.login
 def test_successful_login(login_page):
     login_page.navigate("/")
     login_page.login(VALID_USERNAME, VALID_PASSWORD)
@@ -30,7 +36,8 @@ def test_successful_login(login_page):
     expect(login_page.page.locator(".title")).to_have_text("Products")
 
 
-@pytest.mark.skip(reason="Already Passed Test Cases")
+#@pytest.mark.skip(reason="Already Passed Test Cases")
+@pytest.mark.login
 @pytest.mark.parametrize("login_predefined_users_data",login_data, ids=test_case_ids)
 def test_login_with_predefined_users(login_page,
                                      login_predefined_users_data ):
@@ -50,7 +57,8 @@ def test_login_with_predefined_users(login_page,
     else:
         pytest.fail(f"unsupported expected result:{expected_result}")
 
-@pytest.mark.skip(reason="Already Passed Test Cases")
+#@pytest.mark.skip(reason="Already Passed Test Cases")
+@pytest.mark.login
 @pytest.mark.parametrize("invalid_login_user_data",invalid_login_user_data_from_csv, ids=invalid_login_test_case_ids)
 def test_verify_invalid_user_login(login_page,invalid_login_user_data):
     username = invalid_login_user_data["username"]
@@ -62,6 +70,10 @@ def test_verify_invalid_user_login(login_page,invalid_login_user_data):
     expect(login_page.error_message).to_be_visible()
     expect(login_page.error_message).to_contain_text(expected_error_msg)
 
+
+@pytest.mark.smoke
+@pytest.mark.regression
+@pytest.mark.logout
 def test_verify_logout_functionality(login_page,product_page):
     login_page.navigate("/")
     login_page.login(VALID_USERNAME, VALID_PASSWORD)
