@@ -20,6 +20,7 @@ class LoginPage:
 
     @property
     def error_message(self):
+        print(self._error_message.inner_text())
         return self._error_message
 
 
