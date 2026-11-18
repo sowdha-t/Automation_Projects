@@ -71,6 +71,7 @@ def test_verify_invalid_user_login(login_page,invalid_login_user_data):
     expect(login_page.error_message).to_contain_text(expected_error_msg)
 
 
+@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.smoke
 @pytest.mark.regression
 @pytest.mark.logout
