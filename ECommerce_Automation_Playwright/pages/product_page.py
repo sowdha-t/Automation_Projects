@@ -37,7 +37,7 @@ class ProductsPage:
             product_name = product_item.get_by_test_id("inventory-item-name").inner_text().strip()
             product_item_description = product_item.get_by_test_id("inventory-item-desc").inner_text().strip()
             product_price = product_item.get_by_test_id("inventory-item-price").inner_text().strip()
-            all_products_details.append ({"product_name":product_name,"price":product_price})
+            all_products_details.append ({"product_name":product_name,"product_price":product_price})
 
         return all_products_details
 

@@ -10,7 +10,6 @@ def test_verify_cart_icon_visible_and_enabled(product_page):
     product_page.shopping_cart.click()
     expect(product_page.page).to_have_url("https://www.saucedemo.com/cart.html")
 
-
 def test_select_random_products(product_page):
     total_list = product_page.get_all_product_list()
     selected_products = product_page.select_random_products(total_list)
