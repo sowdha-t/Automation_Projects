@@ -14,6 +14,21 @@ def test_verify_cart_icon_visible_and_enabled(product_page):
 def test_select_random_products(product_page):
     total_list = product_page.get_all_product_list()
     selected_products = product_page.select_random_products(total_list)
+    product_page.add_selected_products_to_cart(selected_products)
     assert len(selected_products) == 4 # We choose 4 products randomly
-    assert int(product_page.get_cart_item_count()) == len(selected_products) #verify successfuly added to cart
+    assert int(product_page.get_cart_item_count()) == len(selected_products) #verify products successfuly added to cart
+
+def test_validate_selected_random_products(product_page,cart_page):
+    total_list = product_page.get_all_product_list()
+    selected_products = product_page.select_random_products(total_list)
+    product_page.add_selected_products_to_cart(selected_products)
+    assert len(selected_products) == 4  # We choose 4 products randomly
+    product_page.shopping_cart.click()
+    assert int(cart_page.get_cart_item_count()) == len(selected_products)
+    cart_page_product_list = cart_page.get_cart_page_product_list()
+    #asserting selected product list count matches with cart page product list
+    print(f"Cart Page Product List:{cart_page_product_list}")
+    assert len(cart_page_product_list) == len(selected_products)
+
+
 
