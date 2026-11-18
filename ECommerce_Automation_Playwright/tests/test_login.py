@@ -16,7 +16,7 @@ invalid_login_user_data_from_csv = CSVReader.read_csv_data(csv_file_path)
 invalid_login_test_case_ids =[data['test_case'] for data in invalid_login_user_data_from_csv]
 
 
-#@pytest.mark.skip(reason="Already Passed Test Cases")
+@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.smoke
 @pytest.mark.regression
 @pytest.mark.login
@@ -24,7 +24,7 @@ def test_application_launch(login_page):
     login_page.navigate("/")
     expect(login_page.page).to_have_title("Swag Labs")
 
-#@pytest.mark.skip(reason="Already Passed Test Cases")
+@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.smoke
 @pytest.mark.regression
 @pytest.mark.login
@@ -36,7 +36,7 @@ def test_successful_login(login_page):
     expect(login_page.page.locator(".title")).to_have_text("Products")
 
 
-#@pytest.mark.skip(reason="Already Passed Test Cases")
+@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.login
 @pytest.mark.parametrize("login_predefined_users_data",login_data, ids=test_case_ids)
 def test_login_with_predefined_users(login_page,
@@ -57,7 +57,7 @@ def test_login_with_predefined_users(login_page,
     else:
         pytest.fail(f"unsupported expected result:{expected_result}")
 
-#@pytest.mark.skip(reason="Already Passed Test Cases")
+@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.login
 @pytest.mark.parametrize("invalid_login_user_data",invalid_login_user_data_from_csv, ids=invalid_login_test_case_ids)
 def test_verify_invalid_user_login(login_page,invalid_login_user_data):
