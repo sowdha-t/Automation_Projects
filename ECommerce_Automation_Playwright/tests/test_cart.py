@@ -1,7 +1,4 @@
-from itertools import product
-
 import pytest
-from playwright.sync_api import expect
 
 @pytest.mark.cart_validation
 @pytest.mark.regression
@@ -26,7 +23,6 @@ def test_validate_cart_page_product_list(product_page,cart_page):
             if cart_product["product_name"] == product_name:
                 product_found = True
                 assert cart_product["product_price"] == product_price
-                assert cart_product["product_name"] == product_name
                 assert int(cart_product["product_quantity"]) == 1
         matching_product.append(product_found)
     print(f"Matching Products Found:{matching_product}")

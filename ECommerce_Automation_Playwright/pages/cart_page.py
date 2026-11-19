@@ -35,3 +35,6 @@ class CartPage:
 
         return cart_page_product_details
 
+    def click_checkout_button(self):
+        self._checkout_button.click()
+

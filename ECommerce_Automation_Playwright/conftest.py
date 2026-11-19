@@ -3,6 +3,7 @@ import pytest
 from playwright.sync_api import Page, Playwright
 
 from pages.cart_page import CartPage
+from pages.checkout_page import CheckoutPage
 from pages.login_page import LoginPage
 from pages.product_page import ProductsPage
 from config.settings import VALID_USERNAME, VALID_PASSWORD
@@ -35,3 +36,7 @@ def logged_in_user(login_page):
 @pytest.fixture
 def cart_page(logged_in_user):
     return CartPage(logged_in_user.page)
+
+@pytest.fixture
+def checkout_page(logged_in_user):
+    return CheckoutPage(logged_in_user.page)
