@@ -10,6 +10,8 @@ def test_verify_cart_icon_visible_and_enabled(product_page):
     product_page.shopping_cart.click()
     expect(product_page.page).to_have_url("https://www.saucedemo.com/cart.html")
 
+@pytest.mark.smoke
+@pytest.mark.regression
 def test_select_random_products(product_page):
     total_list = product_page.get_all_product_list()
     selected_products = product_page.select_random_products(total_list)
@@ -17,6 +19,8 @@ def test_select_random_products(product_page):
     assert len(selected_products) == 4 # We choose 4 products randomly
     assert int(product_page.get_cart_item_count()) == len(selected_products) #verify products successfuly added to cart
 
+@pytest.mark.smoke
+@pytest.mark.regression
 def test_validate_selected_random_products(product_page,cart_page):
     total_list = product_page.get_all_product_list()
     selected_products = product_page.select_random_products(total_list)
@@ -28,6 +32,25 @@ def test_validate_selected_random_products(product_page,cart_page):
     #asserting selected product list count matches with cart page product list
     print(f"Cart Page Product List:{cart_page_product_list}")
     assert len(cart_page_product_list) == len(selected_products)
+
+@pytest.mark.sorting
+@pytest.mark.parametrize("sorting_options",["name-sort-asc","name-sort-desc","price-low-high","price-high-low"],
+                         ids=["Sorting-Name Asc","Sorting-Name Desc","Sorting-Price low-high","Sorting-Price high-low"])
+def test_sorting_functionality(product_page,sorting_options):
+    total_list = product_page.get_all_product_list()
+
+    product_page.select_sorting_option(sorting_options)
+    #Getting the product list after sorting
+
+    after_sort_product_list = product_page.get_all_product_list()
+    print(f"After Sorting:{after_sort_product_list}")
+
+    #verifying the sorted list is according to name
+    is_sorted_right = product_page.verify_product_sorting(total_list,after_sort_product_list,sorting_options)
+    assert is_sorted_right ,f"Sorting failed for option: {sorting_options}"
+
+
+
 
 
 
