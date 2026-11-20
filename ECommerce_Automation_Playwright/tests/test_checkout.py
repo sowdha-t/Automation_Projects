@@ -2,7 +2,10 @@ from playwright.sync_api import expect
 import pytest
 
 @pytest.mark.checkout
+@pytest.mark.smoke
+@pytest.mark.regression
 def test_checkout_end_to_end(product_page,cart_page,checkout_page):
+    #user already logged in and selecting some random products
     total_list = product_page.get_all_product_list()
     selected_products = product_page.select_random_products(total_list)
     product_page.add_selected_products_to_cart(selected_products)
@@ -59,11 +62,20 @@ def test_checkout_end_to_end(product_page,cart_page,checkout_page):
 
     assert check_out_page_product_details == cart_product_details
 
+    #Checking the subtotal and total amount of the order
+
+    assert checkout_page.calculate_total_payment(checkout_page_product_list), ("Calculation is not right")
+
+    checkout_page.take_order_screenshot()
+
     checkout_page.click_finish_order()
 
     expect(checkout_page.page).to_have_url("https://www.saucedemo.com/checkout-complete.html")
 
     expect(checkout_page.get_header_status).to_have_text("Thank you for your order!")
+
+
+
 
 
 

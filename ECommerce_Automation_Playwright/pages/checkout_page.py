@@ -1,3 +1,4 @@
+from decimal import Decimal
 class CheckoutPage:
     def __init__(self, page):
         self.page = page
@@ -63,3 +64,36 @@ class CheckoutPage:
     @property
     def get_header_status(self):
         return self._order_completion_status
+
+    def calculate_total_payment(self,checkout_page_product_list):
+        tax_amount_on_checkout_page= self._tax_amount_field.inner_text().strip()
+        total_amount_on_checkout_page = self._payment_total_amount_field.inner_text().strip()
+        subtotal_amount_on_checkout_page = self._subtotal_amount_field.inner_text().strip()
+
+        clean_tax=Decimal(tax_amount_on_checkout_page.split("$")[-1].strip())
+        clean_total_amount=Decimal(total_amount_on_checkout_page.split("$")[-1].strip())
+        clean_subtotal=Decimal(subtotal_amount_on_checkout_page.split("$")[-1].strip())
+
+        print(f"tax_amount_on_checkout_page :{tax_amount_on_checkout_page} and cleaned tax amount ={clean_tax}")
+        print(f"total_amount_on_checkout_page:{total_amount_on_checkout_page } and cleaned total amount ={clean_total_amount}")
+        print(f"subtotal_amount_on_checkout_page:{subtotal_amount_on_checkout_page} and cleaned sub total amount ={clean_subtotal}")
+
+        individual_price = [Decimal(product["product_price"].replace("$","").strip()) for product in checkout_page_product_list]
+        print("Individual price:", individual_price)
+        sub_total_sum_calculated = sum(individual_price)
+        final_total_sum_calculated = sub_total_sum_calculated + clean_tax
+        print(f"sub_total_sum:{sub_total_sum_calculated}")
+        #print(f"sub_total_sum_rounded:{sub_total_sum_rounded}")
+        print(f"clean tax:{clean_tax}")
+        print(f"final_total_sum:{final_total_sum_calculated}")
+
+
+        if clean_total_amount == final_total_sum_calculated and clean_subtotal == sub_total_sum_calculated:
+            return True
+
+        return False
+
+
+    def take_order_screenshot(self):
+        self.page.screenshot(path="reports/screenshots/order_summary.png",full_page=True)
+
