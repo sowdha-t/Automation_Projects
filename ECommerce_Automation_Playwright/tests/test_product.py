@@ -49,6 +49,32 @@ def test_sorting_functionality(product_page,sorting_options):
     is_sorted_right = product_page.verify_product_sorting(total_list,after_sort_product_list,sorting_options)
     assert is_sorted_right ,f"Sorting failed for option: {sorting_options}"
 
+@pytest.mark.resetapp
+def test_reset_app_functionality(product_page,cart_page):
+    total_list = product_page.get_all_product_list()
+    selected_products = product_page.select_random_products(total_list)
+    product_page.add_selected_products_to_cart(selected_products)
+    assert len(selected_products) == 4  # We choose 4 products randomly
+    assert int(product_page.get_cart_item_count()) == len(
+        selected_products)  # verify products successfuly added to cart
+
+    #Open the menu and click reset app link
+    # open menu and click logout
+    product_page.open_menu()
+    product_page.click_reset_app_link()
+    product_page.page.reload()
+
+    #verify cart icon badge
+    expect(product_page.shopping_cart_badge).not_to_be_attached()
+
+    #go to cart page
+    product_page.shopping_cart.click()
+
+    #Verify theres no product listed
+    expect(cart_page.cart_product_container).not_to_be_attached()
+
+
+
 
 
 

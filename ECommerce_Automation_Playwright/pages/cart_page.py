@@ -21,6 +21,10 @@ class CartPage:
     def shopping_cart(self):
         return self._shopping_cart_icon
 
+    @property
+    def cart_product_container(self):
+        return self._all_product_list
+
     def get_cart_page_product_list(self):
         cart_page_product_elements = self._all_product_list
         cart_page_product_elements.first.wait_for()

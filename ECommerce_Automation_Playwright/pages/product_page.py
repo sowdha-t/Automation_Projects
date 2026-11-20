@@ -1,15 +1,13 @@
 import random
 from decimal import Decimal
 
-import pytest
-
-
 class ProductsPage:
     def __init__(self, page):
         self.page = page
         #Locators
         self._menubar_button= page.locator("#react-burger-menu-btn")
         self._logout_menu_link = page.locator("#logout_sidebar_link")
+        self._reset_app_link = page.get_by_test_id("reset-sidebar-link")
 
         #cart locators
         self._shopping_cart_icon = page.locator("a[data-test='shopping-cart-link']")
@@ -21,11 +19,15 @@ class ProductsPage:
         #Sorting dropdown
         self._sorting_dropdown = page.get_by_test_id("product-sort-container")
 
+
     def open_menu(self):
         self._menubar_button.click()
 
     def click_logout(self):
         self._logout_menu_link.click()
+
+    def click_reset_app_link(self):
+        self._reset_app_link.click()
 
     def get_cart_item_count(self):
         cart_item_count = self._shopping_cart_item_count.inner_text()
@@ -34,6 +36,10 @@ class ProductsPage:
     @property
     def shopping_cart(self):
         return self._shopping_cart_icon
+
+    @property
+    def shopping_cart_badge(self):
+        return self._shopping_cart_item_count
 
     def get_all_product_list(self):
         all_product_list_elements = self._all_product_list
