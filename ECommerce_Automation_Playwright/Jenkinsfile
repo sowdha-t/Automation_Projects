@@ -1,5 +1,11 @@
 pipeline {
     agent any
+        options {
+                buildDiscarder(logRotator(
+                            numToKeepStr: '2',
+                        artifactNumToKeepStr: '3'
+                 ))
+        }
 
         stages{
             stage('Clean Workspace'){
@@ -53,21 +59,52 @@ pipeline {
                 steps{
                     echo "Run Automation Scripts"
                     dir('ECommerce_Automation_Playwright'){
-                        bat '.venv\\Scripts\\python -m pytest'
+                        withCredentials([
+                        file(credentialsId: 'ecommerce-env', variable: 'ENV_FILE')
+                        ]){
+                            script{
+                                    bat '''
+                                          echo Checking credentials file availability...
+                                          if exist "%ENV_FILE%" (
+                                                echo Credentials file found.
+                                            ) else (
+                                          echo Credentials file NOT found.
+                                             exit /b 1
+                                             )
+
+                                            copy /Y "%ENV_FILE%" ".env"
+                                         '''
+
+                                            try {
+                                                 bat '.venv\\Scripts\\python -m pytest'
+                                                } finally {
+                                                     bat 'if exist .env del .env'
+                                                }
+                                    }
+                        }
                     }
 
                 }
 
             }
-            post{
+
+        }
+        post{
                 always{
                 archiveArtifacts(
-                artifacts: 'ECommerce_Automation_Playwright/reports/**/* , ECommerce_Automation_Playwright/logs/**/*',
-                allowEmptyArchive: true
+                    artifacts: 'ECommerce_Automation_Playwright/reports/**/* , ECommerce_Automation_Playwright/logs/**/*',
+                    allowEmptyArchive: true
                 )
+                publishHTML([
+                    reportDir : 'ECommerce_Automation_Playwright/reports/html',
+                    reportFiles : 'report.html',
+                    reportName : 'Playwright ECommerce Automation Test Report',
+                    keepAll: true,
+                    alwaysLinkToLastBuild: true,
+                    allowMissing:true
+                ])
 
                 }
 
             }
-        }
 }
