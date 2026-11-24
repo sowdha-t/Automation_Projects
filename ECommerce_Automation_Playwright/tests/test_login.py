@@ -5,7 +5,7 @@ from utils.json_reader import JsonReader
 from utils.csv_reader import CSVReader
 from pathlib import Path
 from utils.logger import logger
-import logging
+
 
 #Predefined user login data from json file
 json_file_path = Path(__file__).resolve().parent.parent / "test_data" / "login_data.json"

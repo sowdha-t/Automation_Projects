@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+
+        stages{
+            stage('Clean Workspace'){
+                steps{
+                    //deletes previous runs before starting fresh
+                    cleanWs()
+                }
+
+            }
+            stage('Checkout'){
+                steps{
+                    echo "Fetching the Automation Project Repository"
+                    checkout scm
+
+                }
+
+            }
+            stage('Setup Python Environment'){
+                steps{
+                    dir('ECommerce_Automation_Playwright'){
+                        bat 'python --version'
+                        bat 'python -m venv .venv'
+                        bat '.venv\\Scripts\\python -m pip install --upgrade pip'
+
+                    }
+
+                }
+
+            }
+            stage('Install Dependencies'){
+                steps{
+                    echo "Install Dependencies"
+                    dir('ECommerce_Automation_Playwright'){
+
+                        bat '.venv\\Scripts\\python -m pip install -r requirements.txt'
+                        bat '.venv\\Scripts\\python -m playwright install chromium firefox'
+                    }
+                }
+            }
+            stage('Prepare Report Directory'){
+                steps{
+                    dir('ECommerce_Automation_Playwright'){
+                        bat 'if not exist reports\\html mkdir reports\\html'
+                        bat 'if not exist reports\\screenshots mkdir reports\\screenshots'
+                        bat 'if not exist logs mkdir logs'
+                    }
+                }
+
+            }
+            stage('Run Automation Scripts'){
+                steps{
+                    echo "Run Automation Scripts"
+                    dir('ECommerce_Automation_Playwright'){
+                        bat '.venv\\Scripts\\python -m pytest'
+                    }
+
+                }
+
+            }
+            post{
+                always{
+                archiveArtifacts(
+                artifacts: 'ECommerce_Automation_Playwright/reports/**/* , ECommerce_Automation_Playwright/logs/**/*',
+                allowEmptyArchive: true
+                )
+
+                }
+
+            }
+        }
+}
