@@ -1,5 +1,6 @@
 import pytest
 from playwright.sync_api import expect
+from utils.logger import logger
 
 @pytest.mark.skip(reason = "Test case successfully passed")
 @pytest.mark.smoke
@@ -51,6 +52,7 @@ def test_sorting_functionality(product_page,sorting_options):
 
 @pytest.mark.resetapp
 def test_reset_app_functionality(product_page,cart_page):
+    logger.info("Reset App Test functionality Starts")
     total_list = product_page.get_all_product_list()
     selected_products = product_page.select_random_products(total_list)
     product_page.add_selected_products_to_cart(selected_products)
@@ -72,6 +74,7 @@ def test_reset_app_functionality(product_page,cart_page):
 
     #Verify theres no product listed
     expect(cart_page.cart_product_container).not_to_be_attached()
+    logger.info("Reset App Test functionality Finished")
 
 
 

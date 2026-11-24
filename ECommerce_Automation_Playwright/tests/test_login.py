@@ -4,6 +4,8 @@ from config.settings import VALID_USERNAME, VALID_PASSWORD
 from utils.json_reader import JsonReader
 from utils.csv_reader import CSVReader
 from pathlib import Path
+from utils.logger import logger
+import logging
 
 #Predefined user login data from json file
 json_file_path = Path(__file__).resolve().parent.parent / "test_data" / "login_data.json"
@@ -16,27 +18,31 @@ invalid_login_user_data_from_csv = CSVReader.read_csv_data(csv_file_path)
 invalid_login_test_case_ids =[data['test_case'] for data in invalid_login_user_data_from_csv]
 
 
-@pytest.mark.skip(reason="Already Passed Test Cases")
+#@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.smoke
 @pytest.mark.regression
 @pytest.mark.login
 def test_application_launch(login_page):
+    logger.info("Navigating to the application page")
     login_page.navigate("/")
     expect(login_page.page).to_have_title("Swag Labs")
+    logger.info("Successfully navigated to the application page")
 
-@pytest.mark.skip(reason="Already Passed Test Cases")
+#@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.smoke
 @pytest.mark.regression
 @pytest.mark.login
 def test_successful_login(login_page):
     login_page.navigate("/")
+    logger.info(f"Navigating using username:{VALID_USERNAME}")
     login_page.login(VALID_USERNAME, VALID_PASSWORD)
     expect(login_page.page).to_have_title("Swag Labs")
     expect(login_page.page).to_have_url("inventory.html")
     expect(login_page.page.locator(".title")).to_have_text("Products")
+    logger.info(f"Successfully logged in using Valid username:{VALID_USERNAME}")
 
 
-@pytest.mark.skip(reason="Already Passed Test Cases")
+#@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.login
 @pytest.mark.parametrize("login_predefined_users_data",login_data, ids=test_case_ids)
 def test_login_with_predefined_users(login_page,
@@ -46,6 +52,9 @@ def test_login_with_predefined_users(login_page,
     password = VALID_PASSWORD
     expected_result = login_predefined_users_data["expected_result"]
     expected_error_message = login_predefined_users_data.get("expected_error_message","")
+    logger.info(f"Login with pre-defined user:{username}")
+    logger.info(f"Expected result:{expected_result}")
+    logger.info(f"Expected error message:{expected_error_message}")
     login_page.login(username, password)
     if "success" == expected_result:
         expect(login_page.page).to_have_title("Swag Labs")
@@ -57,12 +66,14 @@ def test_login_with_predefined_users(login_page,
     else:
         pytest.fail(f"unsupported expected result:{expected_result}")
 
-@pytest.mark.skip(reason="Already Passed Test Cases")
+#@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.login
 @pytest.mark.parametrize("invalid_login_user_data",invalid_login_user_data_from_csv, ids=invalid_login_test_case_ids)
 def test_verify_invalid_user_login(login_page,invalid_login_user_data):
+    logger.info("Verifying Invalid User Login")
     username = invalid_login_user_data["username"]
     password = invalid_login_user_data["password"]
+    logger.info(f"Verifying Invalid user login:{username}")
     expected_error_msg = invalid_login_user_data["expected_error"]
     login_page.navigate("/")
     print(username, password, expected_error_msg)
@@ -71,11 +82,12 @@ def test_verify_invalid_user_login(login_page,invalid_login_user_data):
     expect(login_page.error_message).to_contain_text(expected_error_msg)
 
 
-@pytest.mark.skip(reason="Already Passed Test Cases")
+#@pytest.mark.skip(reason="Already Passed Test Cases")
 @pytest.mark.smoke
 @pytest.mark.regression
 @pytest.mark.logout
 def test_verify_logout_functionality(login_page,product_page):
+    logger.info("Verifying Logout functionality")
     login_page.navigate("/")
     login_page.login(VALID_USERNAME, VALID_PASSWORD)
     expect(login_page.page).to_have_title("Swag Labs")
@@ -95,6 +107,7 @@ def test_verify_logout_functionality(login_page,product_page):
     expect(login_page.password_field).to_be_enabled()
     expect(login_page.submit_button).to_be_enabled()
     expect(login_page.page).to_have_url("https://www.saucedemo.com/")
+    logger.info(f"Successfully logged out using Valid username:{VALID_USERNAME}")
 
 
 
