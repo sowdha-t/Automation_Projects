@@ -73,7 +73,7 @@ def test_reset_app_functionality(product_page,cart_page):
     product_page.shopping_cart.click()
 
     #Verify theres no product listed
-    expect(cart_page.cart_product_container).not_to_be_attached()
+    expect(cart_page.cart_product_container).to_have_count(0)
     logger.info("Reset App Test functionality Finished")
 
 

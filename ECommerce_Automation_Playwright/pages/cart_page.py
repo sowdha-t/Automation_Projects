@@ -24,7 +24,7 @@ class CartPage:
 
     @property
     def cart_product_container(self):
-        return self._cart_list_container
+        return self._all_product_list
 
     def get_cart_page_product_list(self):
         cart_page_product_elements = self._all_product_list
