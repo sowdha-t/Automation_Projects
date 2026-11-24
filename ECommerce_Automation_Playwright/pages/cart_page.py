@@ -5,7 +5,8 @@ class CartPage:
         #Locators in Cart Page
 
         #Product details locators
-        self._all_product_list = page.get_by_test_id("inventory-item")
+        self._cart_list_container = page.get_by_test_id("cart-list")
+        self._all_product_list = self._cart_list_container.get_by_test_id("inventory-item")
         self._checkout_button = page.get_by_test_id("checkout")
         self._continue_shopping_button = page.get_by_test_id("continue-shopping")
 
@@ -23,13 +24,19 @@ class CartPage:
 
     @property
     def cart_product_container(self):
-        return self._all_product_list
+        return self._cart_list_container
 
     def get_cart_page_product_list(self):
         cart_page_product_elements = self._all_product_list
         cart_page_product_elements.first.wait_for()
+        print("Cart URL:", self.page.url)
         cart_page_product_count = cart_page_product_elements.count()
         print(f"cart page product count:{cart_page_product_count}")
+        for index, product_item in enumerate(cart_page_product_elements.all()):
+            print(
+                f"Container {index}:",
+                product_item.get_attribute("class")
+            )
         cart_page_product_details = []
         for product_item in cart_page_product_elements.all():
             product_name = product_item.get_by_test_id("inventory-item-name").inner_text().strip()
