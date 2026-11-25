@@ -3,7 +3,7 @@ pipeline {
         options {
                 buildDiscarder(logRotator(
                             numToKeepStr: '2',
-                        artifactNumToKeepStr: '3'
+                        artifactNumToKeepStr: '2'
                  ))
         }
 
@@ -70,10 +70,10 @@ pipeline {
                                              exit /b 1
                                              )
 
-                                            copy /Y "%ENV_FILE%" ".env"
                                          '''
 
                                             try {
+                                                 bat copy /Y "%ENV_FILE%" ".env"
                                                  bat '.venv\\Scripts\\python -m pytest'
                                                 } finally {
                                                      bat 'if exist .env del .env'
