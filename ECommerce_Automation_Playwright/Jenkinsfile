@@ -73,7 +73,7 @@ pipeline {
                                          '''
 
                                             try {
-                                                 bat copy /Y "%ENV_FILE%" ".env"
+                                                 bat 'copy /Y "%ENV_FILE%" ".env"'
                                                  bat '.venv\\Scripts\\python -m pytest'
                                                 } finally {
                                                      bat 'if exist .env del .env'
