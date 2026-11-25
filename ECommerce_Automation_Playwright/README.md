@@ -1,14 +1,18 @@
 E-Commerce Automation Framework -- Playwright
+
 A UI test automation framework for the
 SauceDemo application, built with
 Python, Playwright, and pytest. The project uses the Page Object
 Model (POM), reusable pytest fixtures, external test data, HTML
 reporting, logging, failure screenshots, and a Jenkins CI pipeline.
+
 Project Overview
+
 The framework automates key e-commerce user journeys and validates
 important application behaviours, including authentication, product
 selection, cart operations, checkout, sorting, and application-state
 reset.
+
 Technology Stack
 - Language: Python
 - Browser automation: Playwright (Python, synchronous API)
@@ -19,7 +23,9 @@ Technology Stack
 - Reporting: pytest-html
 - CI/CD: Jenkins Declarative Pipeline
 - Version control: Git and GitHub
+
 Automated Test Coverage
+
 The project includes the following test scenarios:
 
 
@@ -49,11 +55,15 @@ in the cart
 flow and validate payment totals
 
   TC-09                               Validate product sorting options
+
 TC-10                               Validate Reset App State
 functionality
+
 The test suite uses pytest markers where appropriate, including
 checkout, smoke, regression, and reset-app categories.
+
 Framework Structure
+
 The project is organised to separate page interactions, tests,
 configuration, test data, and supporting utilities.
 
@@ -96,20 +106,27 @@ ECommerce_Automation_Playwright/
 └── .gitignore  
 
 Design and Implementation
+
 Page Object Model
+
 Page classes encapsulate page-specific locators and user interactions.
 Tests call page methods instead of repeatedly implementing UI
 interactions, helping keep test logic separate from page implementation.
+
 Pytest Fixtures
 Shared fixtures in conftest.py create and provide page objects. The
 login fixture performs authentication, and the product, cart, and
 checkout page objects use the same underlying Playwright Page for a
 test.
+
 Data-Driven Testing
+
 JSON and CSV files keep test inputs separate from test logic. This
 supports parameterised scenarios such as valid and invalid login
 attempts.
+
 Environment Configuration and Secrets
+
 Sensitive values such as login credentials are read from environment
 variables using python-dotenv and load_dotenv().
 
@@ -119,20 +136,27 @@ Create a local .env file for local execution. Do not commit the real
 Example structure (use your own permitted test credentials):
 VALID_USERNAME=your_test_username
 VALID_PASSWORD=your_test_password
+
 For Jenkins, the .env file is stored as a Jenkins Secret file
 credential. The pipeline binds it using withCredentials, copies it
 into the project directory for the test run, and removes the temporary
 copy in a finally block.
+
 Logging and Failure Screenshots
+
 The framework writes execution messages to its log file and console.
 Failure screenshots are captured by the pytest reporting hook and saved
 under reports/screenshots/.
+
 Reporting
+
 pytest-html generates a self-contained HTML report at:
-reports/html/report.html
+reports/html/report.html. 
 The Jenkins pipeline archives reports and logs and publishes the HTML
 report using the Jenkins HTML Publisher plugin.
+
 Local Setup and Execution
+
 Prerequisites
 - Python installed and available on PATH
 - Git
@@ -157,6 +181,8 @@ python -m pytest
 The browser and report options are configured through pytest.ini. The
 project is configured to run Chromium in headless mode for CI execution.
 Jenkins CI Pipeline
+
+
 The project has its own Jenkinsfile inside
 ECommerce_Automation_Playwright/. The Jenkins job is configured to use
 Pipeline script from SCM and points to this Script Path:
@@ -176,7 +202,9 @@ Pipeline stages
 5. Run Automation Scripts -- retrieves the Jenkins Secret file
    credential, makes .env available for the test run, executes
    pytest, and removes the temporary .env file.
+
 Post-build actions
+
 The pipeline uses post { always { ... } } so reporting and artifact
 handling are attempted whether the test stage succeeds or fails.
 - archiveArtifacts archives generated reports and logs with the
@@ -207,6 +235,7 @@ requirements.txt and the Jenkinsfile under version control.
 
 
 Future Enhancements:
+
 Potential future improvements include-
 - Parallel test execution with pytest-xdist, after confirming test
   independence and stability.
