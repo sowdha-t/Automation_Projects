@@ -21,6 +21,8 @@ Technology Stack
 - Version control: Git and GitHub
 Automated Test Coverage
 The project includes the following test scenarios:
+
+
   Test case                           Scenario
   TC-01                               Login using predefined users and
 JSON test data
@@ -53,6 +55,8 @@ checkout, smoke, regression, and reset-app categories.
 Framework Structure
 The project is organised to separate page interactions, tests,
 configuration, test data, and supporting utilities.
+
+
 ECommerce_Automation_Playwright/
 │
 ├── config/
