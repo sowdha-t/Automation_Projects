@@ -24,6 +24,7 @@ The project includes the following test scenarios:
 
 
   Test case                           Scenario
+
   TC-01                               Login using predefined users and
 JSON test data
 
@@ -57,42 +58,42 @@ The project is organised to separate page interactions, tests,
 configuration, test data, and supporting utilities.
 
 
-ECommerce_Automation_Playwright/
-│
-├── config/
-│   └── settings.py
-│
-├── pages/
-│   ├── login_page.py
-│   ├── product_page.py
-│   ├── cart_page.py
-│   └── checkout_page.py
-│
-├── tests/
-│   ├── test_login.py
-│   ├── test_product.py
-│   ├── test_cart.py
-│   └── test_checkout.py
-│
-├── test_data/
-│   ├── [JSON test data files]
-│   └── [CSV test data files]
-│
-├── utils/
-│   ├── logger.py
-│   ├── json_reader.py
-│   └── csv_reader.py
-│
-├── logs/
-├── reports/
-│   ├── html/
-│   └── screenshots/
-│
-├── conftest.py
-├── pytest.ini
-├── requirements.txt
-├── Jenkinsfile
-└── .gitignore
+ECommerce_Automation_Playwright/       
+│   
+├── config/   
+│   └── settings.py  
+│   
+├── pages/  
+│   ├── login_page.py  
+│   ├── product_page.py  
+│   ├── cart_page.py  
+│   └── checkout_page.py  
+│  
+├── tests/  
+│   ├── test_login.py   
+│   ├── test_product.py   
+│   ├── test_cart.py   
+│   └── test_checkout.py  
+│  
+├── test_data/  
+│   ├── [JSON test data files]  
+│   └── [CSV test data files]  
+│  
+├── utils/  
+│   ├── logger.py  
+│   ├── json_reader.py  
+│   └── csv_reader.py  
+│  
+├── logs/  
+├── reports/  
+│   ├── html/  
+│   └── screenshots/  
+│  
+├── conftest.py  
+├── pytest.ini  
+├── requirements.txt  
+├── Jenkinsfile  
+└── .gitignore  
 
 Design and Implementation
 Page Object Model
